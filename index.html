@@ -202,6 +202,7 @@
 <body>
 
     <audio id="birthday-audio" src="music.mp3" loop></audio>
+    <audio id="bg-audio" src="background.mp3" loop></audio>
 
     <div id="screen-loading">
         <img src="loading.jpg" alt="Loading" class="loading-img" onerror="this.src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+ip1sAAAAASUVORK5CYII='; this.style.backgroundColor='#ffb6c1';">
@@ -469,6 +470,7 @@
         // Screen Navigation
         function proceedToDashboard() {
             const i = document.getElementById('screen-intro'), m = document.getElementById('screen-main');
+            const bg = document.getElementById('bg-audio'); if(bg) bg.play().catch(()=>{});
             i.style.opacity = 0; setTimeout(() => { i.style.display = 'none'; m.style.display = 'flex'; setTimeout(() => { m.style.opacity = 1; triggerConfetti(); }, 50); }, 800);
         }
         function openFingerprintScreen() {
@@ -483,7 +485,8 @@
         }
         function openGalleryScreen() {
             if (!isBirthdayTime) return triggerCustomAlert(txtGalleryLocked);
-            const m = document.getElementById('screen-main'), g = document.getElementById('screen-gallery'), a = document.getElementById('birthday-audio');
+            const m = document.getElementById('screen-main'), g = document.getElementById('screen-gallery'), a = document.getElementById('birthday-audio'), bg = document.getElementById('bg-audio');
+            if(bg) bg.pause();
             m.style.opacity = 0; setTimeout(() => { m.style.display = 'none'; g.style.display = 'flex'; setTimeout(() => { g.style.opacity = 1; if(a) a.play().catch(()=>{}); }, 50); }, 800);
         }
         function backToDashboard() {
@@ -492,8 +495,9 @@
             l.style.opacity = 0; setTimeout(() => { l.style.display = 'none'; m.style.display = 'flex'; setTimeout(() => m.style.opacity = 1, 50); }, 800);
         }
         function closeGalleryScreen() {
-            const m = document.getElementById('screen-main'), g = document.getElementById('screen-gallery'), a = document.getElementById('birthday-audio');
+            const m = document.getElementById('screen-main'), g = document.getElementById('screen-gallery'), a = document.getElementById('birthday-audio'), bg = document.getElementById('bg-audio');
             if(a) { a.pause(); a.currentTime = 0; }
+            if(bg) bg.play().catch(()=>{});
             document.querySelectorAll('.balloon-wrapper.paused-balloon').forEach(b => b.classList.remove('paused-balloon'));
             g.style.opacity = 0; setTimeout(() => { g.style.display = 'none'; m.style.display = 'flex'; setTimeout(() => m.style.opacity = 1, 50); }, 800);
         }
